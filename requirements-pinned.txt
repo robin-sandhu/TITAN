@@ -1,0 +1,48 @@
+# ==============================================================================
+# TITAN - Pinned Requirements for Reproducibility (Developed by Robin Sandhu)
+# Exact versions for deterministic builds
+# ==============================================================================
+#
+# Installation: pip install -r requirements-pinned.txt
+#
+# Generated: 2026-01-29
+# Python: 3.9+
+# ==============================================================================
+
+# Core Scientific Stack
+numpy==1.24.3
+pandas==2.0.3
+scipy==1.11.1
+
+# Machine Learning
+scikit-learn==1.3.0
+shap==0.42.1
+
+# Visualization
+matplotlib==3.7.2
+seaborn==0.12.2
+
+# Statistics
+statsmodels==0.14.0
+pingouin==0.5.3
+
+# Survival Analysis
+lifelines==0.27.7
+
+# PDF Report Generation
+fpdf2==2.7.4
+
+# Excel Support
+openpyxl==3.1.2
+
+# Graph/Network Analysis
+networkx==3.1
+
+# Model Serialization
+joblib==1.3.1
+
+# ==============================================================================
+# Reproducibility Note:
+# These versions were tested and validated as of 2026-01-29
+# For latest compatible versions, use requirements.txt instead
+# ==============================================================================
