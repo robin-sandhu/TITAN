@@ -1,0 +1,50 @@
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --strict-markers --cov=TITAN --cov-report=term-missing"
+testpaths = [
+    "test_titan.py",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "integration: marks tests as integration tests",
+]
+
+[tool.coverage.run]
+source = ["TITAN"]
+omit = [
+    "*/tests/*",
+    "*/test_*.py",
+]
+
+[tool.coverage.report]
+precision = 2
+show_missing = true
+skip_covered = false
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
