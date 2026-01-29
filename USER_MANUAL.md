@@ -66,8 +66,17 @@ Then enter your CSV file path when prompted.
 
 ### Step 1: Install Core Dependencies
 
+**Option A: Virtual Environment (pip)**
+
 ```bash
 pip install -r requirements.txt
+```
+
+**Option B: Conda (Recommended)**
+
+```bash
+conda env create -f environment.yml
+conda activate titan_env
 ```
 
 ### Step 2: Install Medical Ontology (Optional but Recommended)

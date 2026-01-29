@@ -224,7 +224,7 @@ If you use TITAN in published research, please cite:
 
 ```
 Sandhu, R. (2026). TITAN: A Standardized Framework for Clinical Prediction Model Development.
-Software available at: https://github.com/REPOSITORY_URL
+Software available at: https://github.com/robin-sandhu/TITAN
 ```
 
 And cite the methodological references in `REFERENCES.md`.

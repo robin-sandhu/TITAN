@@ -267,7 +267,7 @@ If you use TITAN in your research, please cite:
   title = {{TITAN}: A Standardized Framework for Clinical Prediction Model Development},
   year = {2026},
   version = {1.0.0},
-  url = {https://github.com/REPOSITORY_URL}
+  url = {https://github.com/robin-sandhu/TITAN}
 }
 ```
 

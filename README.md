@@ -27,12 +27,14 @@ TITAN is a **human-in-the-loop copilot** for developing well-calibrated clinical
 ### Installation
 
 ```bash
-# Create virtual environment
+# Option A: Using Pip (Standard)
 python3 -m venv titan_env
 source titan_env/bin/activate
-
-# Install dependencies
 pip install -r requirements.txt
+
+# Option B: Using Conda (Recommended for Data Science)
+conda env create -f environment.yml
+conda activate titan_env
 
 # Verify installation
 python3 -c "import TITAN; print('TITAN ready')"
@@ -64,6 +66,7 @@ python3 TITAN.py /path/to/your/dataset.csv
 TITAN_FINAL_SUBMISSION/
 ├── TITAN.py                      # Core framework (8,400+ lines)
 ├── requirements.txt              # Python dependencies
+├── environment.yml               # Conda environment file
 ├── Dockerfile                    # Container support
 │
 ├── MANUSCRIPT_DRAFT.md           # Academic paper draft
