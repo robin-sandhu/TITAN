@@ -1,14 +1,9 @@
-# ==============================================================================
-
 # TITAN User Manual
-
 **Developed by Robin Sandhu**
 
 ## A Standardized Framework for Clinical Prediction Model Development
 
 # Version 1.0.0
-
-# ==============================================================================
 
 ## Table of Contents
 
