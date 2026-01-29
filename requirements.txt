@@ -1,0 +1,60 @@
+# ==============================================================================
+# TITAN - Requirements (Developed by Robin Sandhu)
+# A Standardized Framework for Clinical Prediction Model Development
+# ==============================================================================
+# 
+# Installation: pip install -r requirements.txt
+# 
+# For full medical NER/ontology support, also run:
+#   pip install scispacy
+#   pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_core_sci_sm-0.5.4.tar.gz
+#
+# ==============================================================================
+
+# Core Scientific Stack
+numpy>=1.21.0
+pandas>=1.3.0
+scipy>=1.7.0
+
+# Machine Learning
+scikit-learn>=1.0.0
+shap>=0.41.0
+
+# Visualization
+matplotlib>=3.4.0
+seaborn>=0.11.0
+
+# Statistics
+statsmodels>=0.13.0
+pingouin>=0.5.0
+
+# Survival Analysis
+lifelines>=0.27.0
+
+# PDF Report Generation
+fpdf2>=2.7.0
+
+# Excel Support
+openpyxl>=3.0.0
+
+# Graph/Network Analysis
+networkx>=2.6.0
+
+# Model Serialization
+joblib>=1.1.0
+
+# ==============================================================================
+# OPTIONAL: Medical Named Entity Recognition (NER)
+# ==============================================================================
+# These are optional but recommended for full medical ontology support.
+# They enable UMLS-based feature detection and semantic analysis.
+#
+# Uncomment or install separately:
+# scispacy>=0.5.0
+# 
+# After installing scispacy, download the medical language model:
+# pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.5.4/en_core_sci_sm-0.5.4.tar.gz
+#
+# ==============================================================================
+
+

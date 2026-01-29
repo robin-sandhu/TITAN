@@ -1,0 +1,50 @@
+# TITAN Docker Build - Ignore unnecessary files
+
+# Git
+.git
+.gitignore
+
+# Documentation (not needed in container)
+*.md
+!README.md
+
+# Manuscript and submission files
+MANUSCRIPT_DRAFT.md
+TITAN_MANUSCRIPT.md
+COVER_LETTER_TEMPLATE.md
+TRIPOD_AI_CHECKLIST.md
+SUPPLEMENTARY_APPENDIX.md
+Q1_LEVEL_CRITIQUE.md
+FIGURES_FOR_SUBMISSION/
+
+# Datasets (users mount their own)
+datasets/
+*.csv
+
+# Development files
+test_titan.py
+prepare_datasets.py
+run_validation.py
+run_batch.sh
+
+# Installation scripts (not needed in container)
+install_macos.sh
+install_windows.bat
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Virtual environments
+venv/
+titan_venv/

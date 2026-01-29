@@ -1,0 +1,177 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+#  Usually these files are written by a standalone easy_install,
+#  for example with the --user flag and are not typical for scripts.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.stats
+.hypothesis/
+.pytest_cache/
+pytest_debug.log
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+#   For a library or package, you might want to ignore these files since the Python version is
+#   usually handled by the user. Everything else can be ignored.
+# .python-version
+
+# pipenv
+#   According to pypa/pipenv#1191, it is recommended to include Pipfile.lock in version control.
+#   However, in cases where the author of the package doesn't want to lock, it can be ignored.
+# Pipfile.lock
+
+# poetry
+#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
+# poetry.lock
+
+# pdm
+#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
+# pdm.lock
+
+# PEP 582; used by e.g. pdm
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# TITAN Specific
+TITAN_OUTPUT/
+outputs/
+*.log
+.DS_Store
+
+# =============================================
+# EXCLUDE FROM PUBLIC REPO (Journal Submission Files)
+# =============================================
+
+# Manuscript and submission files (keep private)
+MANUSCRIPT_DRAFT.md
+TITAN_MANUSCRIPT.md
+COVER_LETTER_TEMPLATE.md
+TRIPOD_AI_CHECKLIST.md
+SUPPLEMENTARY_APPENDIX.md
+Q1_LEVEL_CRITIQUE.md
+
+# Figures for journal submission
+FIGURES_FOR_SUBMISSION/
+
+# Datasets (users should provide their own)
+datasets/
+
+# Internal/dev scripts
+prepare_datasets.py
+run_validation.py
+run_batch.sh
+simple_test.csv
+
+# Temp files
+*.tmp
+temp_*
