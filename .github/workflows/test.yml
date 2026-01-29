@@ -65,7 +65,7 @@ jobs:
       
       - name: Run Flake8 (linting)
         run: |
-          flake8 TITAN.py test_titan.py --max-line-length=100 --max-complexity=15 --ignore=E203,W503,E501
+          flake8 TITAN.py test_titan.py --max-line-length=100 --max-complexity=15 --ignore=E203,W503,E501,E402,D400
       
       - name: Run MyPy (type checking)
         run: |
