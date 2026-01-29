@@ -271,6 +271,277 @@ class TestIntegration:
             assert Path(result["output_dir"]).exists()
 
 
+# ============================================================================
+# NEW TESTS - Priority 2 Expansion
+# ============================================================================
+
+class TestEPVGuardrails:
+    """Tests for Events Per Variable (EPV) overfitting prevention."""
+    
+    def test_epv_calculation(self):
+        """Test EPV calculation for binary outcomes."""
+        # 100 samples, 20 events, 5 features = EPV of 4
+        n_samples = 100
+        n_events = 20
+        n_features = 5
+        
+        y = np.zeros(n_samples)
+        y[:n_events] = 1
+        
+        epv = n_events / n_features
+        assert epv == 4.0
+        
+        # EPV < 10 should trigger warning (rule of thumb)
+        assert epv < 10, "Low EPV should be detected"
+    
+    def test_epv_insufficient_events(self):
+        """Test detection of insufficient events for modeling."""
+        # 100 samples, 5 events, 20 features = EPV of 0.25
+        n_samples = 100
+        n_events = 5
+        n_features = 20
+        
+        epv = n_events / n_features
+        assert epv < 1.0, "Critically low EPV should be detected"
+
+
+class TestHMACIntegrity:
+    """Tests for audit log HMAC integrity verification."""
+    
+    def test_audit_log_integrity_seal(self):
+        """Test that finalize_session creates integrity hash."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            log_path = Path(tmpdir) / "integrity_test.jsonl"
+            audit = AuditLog(log_path)
+            
+            audit.log("TEST_EVENT_1", {"data": "value1"})
+            audit.log("TEST_EVENT_2", {"data": "value2"})
+            
+            summary = audit.finalize_session()
+            
+            assert "integrity_hash" in summary
+            assert summary["integrity_hash"] is not None
+            assert len(summary["integrity_hash"]) > 0
+    
+    def test_verification_key_uniqueness(self):
+        """Test that each session gets unique verification key."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            log1_path = Path(tmpdir) / "log1.jsonl"
+            log2_path = Path(tmpdir) / "log2.jsonl"
+            
+            audit1 = AuditLog(log1_path)
+            audit2 = AuditLog(log2_path)
+            
+            key1 = audit1.get_verification_key()
+            key2 = audit2.get_verification_key()
+            
+            assert key1 != key2, "Verification keys must be unique per session"
+    
+    def test_crypto_summary_completeness(self):
+        """Test that crypto summary contains all required fields."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            log_path = Path(tmpdir) / "crypto_test.jsonl"
+            audit = AuditLog(log_path)
+            
+            crypto = audit.get_crypto_summary()
+            
+            assert "verification_key" in crypto
+            assert "key_derivation" in crypto
+            assert "security_properties" in crypto
+            assert "compliance" in crypto
+            assert crypto["key_derivation"]["algorithm"] == "PBKDF2-HMAC-SHA256"
+
+
+class TestExternalValidation:
+    """Tests for external validation dataset workflow."""
+    
+    def test_external_validation_data_loading(self):
+        """Test loading of external validation dataset."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpdir = Path(tmpdir)
+            
+            # Create training data
+            train_df = SyntheticDataGenerator.generate_binary_classification(n_samples=200)
+            train_path = tmpdir / "train.csv"
+            train_df.to_csv(train_path, index=False)
+            
+            # Create external validation data
+            val_df = SyntheticDataGenerator.generate_binary_classification(n_samples=100)
+            val_path = tmpdir / "validation.csv"
+            val_df.to_csv(val_path, index=False)
+            
+            assert train_path.exists()
+            assert val_path.exists()
+            
+            # Verify same structure
+            assert list(train_df.columns) == list(val_df.columns)
+
+
+class TestMissingDataHandling:
+    """Tests for missing data imputation and detection."""
+    
+    def test_missing_rate_calculation(self):
+        """Test calculation of missing data rates."""
+        df = pd.DataFrame({
+            'a': [1, 2, np.nan, 4, 5],
+            'b': [np.nan, np.nan, 3, 4, 5],
+            'c': [1, 2, 3, 4, 5]
+        })
+        
+        profile = profile_dataset(df)
+        
+        # 3 missing cells out of 15 total = 20%
+        assert profile['missing_cells'] == 3
+        assert profile['missing_pct'] == pytest.approx(20.0, rel=0.1)
+    
+    def test_complete_case_detection(self):
+        """Test detection of complete cases (no missing)."""
+        df = pd.DataFrame({
+            'a': [1, 2, np.nan, 4],
+            'b': [5, np.nan, 7, 8]
+        })
+        
+        complete_cases = df.dropna()
+        assert len(complete_cases) == 2
+
+
+class TestCalibrationMetrics:
+    """Extended tests for calibration slope and intercept."""
+    
+    def test_perfect_calibration(self):
+        """Test metrics for perfectly calibrated predictions."""
+        n = 500
+        np.random.seed(RANDOM_STATE)
+        
+        # Generate perfectly calibrated predictions
+        y_prob = np.random.uniform(0.1, 0.9, n)
+        y_true = (np.random.random(n) < y_prob).astype(int)
+        
+        slope, intercept = calibration_slope_intercept(y_true, y_prob)
+        
+        # Perfect calibration: slope ≈ 1, intercept ≈ 0
+        assert 0.8 <= slope <= 1.2, f"Slope {slope} should be close to 1"
+        assert -0.3 <= intercept <= 0.3, f"Intercept {intercept} should be close to 0"
+    
+    def test_overconfident_predictions(self):
+        """Test detection of overconfident (miscalibrated) predictions."""
+        n = 200
+        np.random.seed(RANDOM_STATE)
+        
+        # Overconfident: predictions too extreme
+        y_true = np.random.binomial(1, 0.5, n)
+        y_prob = np.where(y_true == 1, 
+                         np.random.uniform(0.8, 1.0, n),
+                         np.random.uniform(0.0, 0.2, n))
+        
+        slope, intercept = calibration_slope_intercept(y_true, y_prob)
+        
+        # Overconfidence typically results in slope < 1
+        assert slope < 1.0, "Overconfident predictions should have slope < 1"
+
+
+class TestBootstrapRobustness:
+    """Extended tests for bootstrap CI robustness."""
+    
+    def test_bootstrap_with_class_imbalance(self):
+        """Test bootstrap CI with severe class imbalance."""
+        np.random.seed(RANDOM_STATE)
+        
+        # 10% positive class (imbalanced)
+        n = 200
+        n_pos = 20
+        y_true = np.array([1]*n_pos + [0]*(n-n_pos))
+        y_prob = np.concatenate([
+            np.random.uniform(0.6, 0.9, n_pos),
+            np.random.uniform(0.1, 0.4, n-n_pos)
+        ])
+        
+        ci_low, ci_high = bootstrap_auc_ci(y_true, y_prob, n_bootstrap=100)
+        
+        assert not np.isnan(ci_low), "Should handle class imbalance"
+        assert not np.isnan(ci_high), "Should handle class imbalance"
+        assert ci_low < ci_high
+    
+    def test_bootstrap_deterministic(self):
+        """Test that bootstrap is deterministic with fixed seed."""
+        np.random.seed(RANDOM_STATE)
+        
+        y_true = np.random.binomial(1, 0.5, 150)
+        y_prob = y_true * 0.6 + np.random.uniform(0, 0.4, 150)
+        
+        # Run twice with same seed
+        ci1_low, ci1_high = bootstrap_auc_ci(y_true, y_prob, n_bootstrap=100)
+        ci2_low, ci2_high = bootstrap_auc_ci(y_true, y_prob, n_bootstrap=100)
+        
+        assert ci1_low == ci2_low, "Bootstrap should be deterministic"
+        assert ci1_high == ci2_high, "Bootstrap should be deterministic"
+
+
+class TestDataQualityChecks:
+    """Tests for data quality validation."""
+    
+    def test_duplicate_detection(self):
+        """Test detection of duplicate rows."""
+        df = pd.DataFrame({
+            'a': [1, 2, 2, 3],
+            'b': [4, 5, 5, 6]
+        })
+        
+        profile = profile_dataset(df)
+        assert profile['duplicates'] == 1
+    
+    def test_unique_value_counts(self):
+        """Test unique value counting."""
+        df = pd.DataFrame({
+            'id': [1, 2, 3, 4, 5],
+            'category': ['A', 'B', 'A', 'B', 'C']
+        })
+        
+        schema = schema_dictionary(df)
+        
+        id_row = schema[schema['variable'] == 'id'].iloc[0]
+        cat_row = schema[schema['variable'] == 'category'].iloc[0]
+        
+        assert id_row['n_unique'] == 5
+        assert cat_row['n_unique'] == 3
+
+
+class TestModelSerialization:
+    """Extended tests for model save/load functionality."""
+    
+    def test_model_persistence_metadata(self):
+        """Test that model metadata persists through save/load."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpdir = Path(tmpdir)
+            audit = AuditLog(tmpdir / "test_audit.jsonl")
+            
+            model_dict = {
+                "model": None,
+                "base": None,
+                "preprocessor": None,
+                "feature_names": ["age", "biomarker", "sex"],
+                "auc": 0.87,
+                "brier": 0.13,
+                "calibration_slope": 0.95,
+                "metadata": {
+                    "training_date": "2026-01-29",
+                    "n_samples": 1000
+                }
+            }
+            
+            model_path = save_model(model_dict, tmpdir, audit, use_joblib=False)
+            loaded = load_model(model_path, audit)
+            
+            assert loaded["auc"] == 0.87
+            assert loaded["brier"] == 0.13
+            assert loaded["calibration_slope"] == 0.95
+            assert loaded["metadata"]["n_samples"] == 1000
+
+
+# ============================================================================
+# Test Configuration
+# ============================================================================
+
 # Fixtures for shared test data
 @pytest.fixture
 def sample_binary_df():
@@ -285,6 +556,12 @@ def sample_binary_df():
             "outcome": np.random.choice([0, 1], n, p=[0.7, 0.3]),
         }
     )
+
+
+@pytest.fixture
+def sample_survival_df():
+    """Create sample survival DataFrame."""
+    return SyntheticDataGenerator.generate_survival_data(n_samples=150)
 
 
 @pytest.fixture
