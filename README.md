@@ -137,7 +137,11 @@ MIT License - See LICENSE file for details.
 
 ---
 
-## Contact
+## Author
 
-**Robin Sandhu**  
+**Robin Sandhu, MBBS**
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/robin-sandhu-mbbs/)
+[![ORCID](https://img.shields.io/badge/ORCID-A6CE39?style=flat&logo=orcid&logoColor=white)](https://orcid.org/0009-0002-2871-4630)
+
 Developer and Maintainer
