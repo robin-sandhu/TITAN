@@ -129,6 +129,8 @@ If you use TITAN in your research, please cite:
 Sandhu, R. (2026). TITAN: A Standardized Framework for Clinical Prediction Model Development.
 ```
 
+This repository is Zenodo-enabled. For machine-readable citation information, see the [CITATION.cff](CITATION.cff) file.
+
 ---
 
 ## License
