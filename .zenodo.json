@@ -1,0 +1,34 @@
+{
+  "title": "TITAN: A Standardized Framework for Clinical Prediction Model Development",
+  "description": "TITAN is a human-in-the-loop copilot for developing well-calibrated clinical prediction models. Unlike AutoML tools that chase AUC, TITAN enforces calibration at every step—because if your model says 30% risk, it should actually mean 30% risk in practice. Core features include Random Forest with calibration, MICE imputation, EPV guardrails, bootstrap confidence intervals, SHAP explainability, fairness auditing, decision curve analysis, and immutable audit logs.",
+  "creators": [
+    {
+      "name": "Sandhu, Robin",
+      "affiliation": ""
+    }
+  ],
+  "license": "MIT",
+  "keywords": [
+    "clinical prediction models",
+    "machine learning",
+    "calibration",
+    "healthcare AI",
+    "random forest",
+    "model validation",
+    "reproducibility",
+    "fairness auditing",
+    "SHAP",
+    "decision curve analysis",
+    "Python"
+  ],
+  "upload_type": "software",
+  "access_right": "open",
+  "language": "eng",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/robin-sandhu/TITAN",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}
